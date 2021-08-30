@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Benutomo.AutomaticDisposeImpl.SourceGenerator
@@ -48,6 +49,7 @@ namespace Benutomo
     }
 }
 ";
+        static string LocalizedAutomaticDisposeImplModeSource;
 
         const string AutomaticDisposeImplAttributeSource = @"
 using System;
@@ -78,12 +80,15 @@ namespace Benutomo
         public string? SelfDisposeMethod { get; set; }
 
         /// <summary>
-        /// マネージドリソースの非同期処理による手動解放を実装するメソッド(引数なしで戻り値は<see cref=""System.Threading.ValueTask"" />などawait可能な型)を指定する。このメソッドは通常の破棄で自動実装側から呼び出される。一般的な場合において実装者はここに指定したメソッドを自分自身で呼び出す必要はない。<see cref=""SelfDisposeAsyncMethod""/>と<see cref=""SelfDisposeMethod""/>で指定されたメソッドは破棄が同期的におこなわれたか非同期的におこなわれたかによってどちらか一方のみしか呼び出されないため、どちらが呼び出されても手動破棄の対象に漏れがないように実装すること。
+        /// マネージドリソースの非同期処理による手動解放を実装するメソッド(引数なしで戻り値は<see cref=""System.Threading.ValueTask"" />などConfigureAwait(false)でawait可能な型)を指定する。このメソッドは通常の破棄で自動実装側から呼び出される。一般的な場合において実装者はここに指定したメソッドを自分自身で呼び出す必要はない。<see cref=""SelfDisposeAsyncMethod""/>と<see cref=""SelfDisposeMethod""/>で指定されたメソッドは破棄が同期的におこなわれたか非同期的におこなわれたかによってどちらか一方のみしか呼び出されないため、どちらが呼び出されても手動破棄の対象に漏れがないように実装すること。
         /// </summary>
         public string? SelfDisposeAsyncMethod { get; set; }
     }
 }
 ";
+        static string LocalizedAutomaticDisposeImplAttributeSource;
+
+
         const string AutomaticDisposeImplModeAttributeSource = @"
 using System;
 
@@ -113,6 +118,98 @@ namespace Benutomo
     }
 }
 ";
+        static string LocalizedAutomaticDisposeImplModeAttributeSource;
+
+        static AutomaticDisposeGenerator()
+        {
+            LocalizedAutomaticDisposeImplAttributeSource = AutomaticDisposeImplAttributeSource;
+            LocalizedAutomaticDisposeImplModeAttributeSource = AutomaticDisposeImplModeAttributeSource;
+            LocalizedAutomaticDisposeImplModeSource = AutomaticDisposeImplModeSource;
+
+            if (System.Globalization.CultureInfo.CurrentUICulture.Name == "ja-JP")
+            {
+                return;
+            }
+
+            var translateTable = new[]
+            {
+                new {
+                    from = @"破棄(<see cref=""System.IDisposable"" />,<see cref=""System.IAsyncDisposable"" />)をサポートするメンバを自動実装Disposeの対象とすることに関する振る舞いの指定。",
+                    to = @"",
+                },
+                new {
+                    from = @"デフォルト。メンバに指定した場合はクラス全体の設定と同じとする。クラス全体もデフォルトの場合は破棄(<see cref=""System.IDisposable"" />,<see cref=""System.IAsyncDisposable"" />)をサポートするメンバは<see cref=""Enable"" />を設定した場合と同様に扱う。",
+                    to = @"",
+                },
+                new {
+                    from = @"自動実装されるDisposeの対象とする。",
+                    to = @"",
+                },
+                new {
+                    from = @"自動実装されるDisposeの対象外とする。Disableにした場合、あえて破棄をしてはならないような特殊ケースでない限り<see cref=""AutomaticDisposeImplAttribute"" />に<see cref=""AutomaticDisposeImplAttribute.SelfDisposeMethod"" />と必要に応じて<see cref=""AutomaticDisposeImplAttribute.SelfDisposeAsyncMethod"" />を指定し、そのメソッド内でこのメンバの破棄を実装すること。",
+                    to = @"",
+                },
+                new {
+                    from = @"指定したクラスに破棄(<see cref=""System.IDisposable"" />,<see cref=""System.IAsyncDisposable"" />)をサポートするメンバを破棄する<see cref=""System.IDisposable.Dispose"" />メソッドおよび<see cref=""System.IAsyncDisposable.DisposeAsync"" />メソッド(当該クラスに<see cref=""System.IAsyncDisposable"" />インターフェイスが含まれている場合のみ)を自動実装する。",
+                    to = @"",
+                },
+                new {
+                    from = @"メンバ毎の<see cref=""AutomaticDisposeImplMode"" />に<see cref=""AutomaticDisposeImplMode.Default"" />が指定されている場合にフォールバックする設定。",
+                    to = @"",
+                },
+                new {
+                    from = @"アンマネージドリソースの手動解放を実装したメソッドを指定する。このメソッドは通常の破棄およびGCのファイナライズのタイミング自動実装側から呼び出される。一般的な場合において実装者はここに指定したメソッドを自分自身で呼び出す必要はない。",
+                    to = @"",
+                },
+                new {
+                    from = @"マネージドリソースの手動解放を実装するメソッド(引数なしで戻り値はvoid)を指定する。このメソッドは通常の破棄で自動実装側から呼び出される。一般的な場合において実装者はここに指定したメソッドを自分自身で呼び出す必要はない。明示的なDisposeがされずにGCのファイナライズによる解放が発生した場合にこのメソッドは呼び出されないことに注意。アンマネージドリソースの解放は<see cref=""ReleaseUnmanagedResourcesMethod""/>で指定するメソッドで行うこと。",
+                    to = @"",
+                },
+                new {
+                    from = @"マネージドリソースの非同期処理による手動解放を実装するメソッド(引数なしで戻り値は<see cref=""System.Threading.ValueTask"" />などConfigureAwait(false)でawait可能な型)を指定する。このメソッドは通常の破棄で自動実装側から呼び出される。一般的な場合において実装者はここに指定したメソッドを自分自身で呼び出す必要はない。<see cref=""SelfDisposeAsyncMethod""/>と<see cref=""SelfDisposeMethod""/>で指定されたメソッドは破棄が同期的におこなわれたか非同期的におこなわれたかによってどちらか一方のみしか呼び出されないため、どちらが呼び出されても手動破棄の対象に漏れがないように実装すること。",
+                    to = @"",
+                },
+                new {
+                    from = @"メンバの破棄の自動実装の設定を明示する属性。",
+                    to = @"",
+                },
+                new {
+                    from = @"自動実装Disposeの対象とするか否かに関する設定。",
+                    to = @"",
+                },
+                new {
+                    from = @"メンバの破棄の自動実装の設定を明示する属性。",
+                    to = @"",
+                },
+                new {
+                    from = @"自動実装Disposeの対象とするか否かに関する設定。",
+                    to = @"",
+                },
+            };
+
+            foreach (var translate in translateTable.OrderByDescending(v => v.from.Length))
+            {
+                var translatedLocalizedAutomaticDisposeImplAttributeSource = LocalizedAutomaticDisposeImplAttributeSource.Replace(translate.from, translate.to);
+                var translatedLocalizedAutomaticDisposeImplModeAttributeSource = LocalizedAutomaticDisposeImplModeAttributeSource.Replace(translate.from, translate.to);
+                var translatedLocalizedAutomaticDisposeImplModeSource = LocalizedAutomaticDisposeImplModeSource.Replace(translate.from, translate.to);
+
+                // 無効変換を簡易チェック
+                Debug.Assert(false
+                    || (translatedLocalizedAutomaticDisposeImplAttributeSource != LocalizedAutomaticDisposeImplAttributeSource)
+                    || (translatedLocalizedAutomaticDisposeImplModeAttributeSource != LocalizedAutomaticDisposeImplModeAttributeSource)
+                    || (translatedLocalizedAutomaticDisposeImplModeSource != LocalizedAutomaticDisposeImplModeSource)
+                    );
+
+                LocalizedAutomaticDisposeImplAttributeSource = translatedLocalizedAutomaticDisposeImplAttributeSource;
+                LocalizedAutomaticDisposeImplModeAttributeSource = translatedLocalizedAutomaticDisposeImplModeAttributeSource;
+                LocalizedAutomaticDisposeImplModeSource = translatedLocalizedAutomaticDisposeImplModeSource;
+            }
+
+            // 変換漏れを簡易チェック
+            Debug.Assert(LocalizedAutomaticDisposeImplAttributeSource.Any(ch => ch <= 0x255));
+            Debug.Assert(LocalizedAutomaticDisposeImplModeAttributeSource.Any(ch => ch <= 0x255));
+            Debug.Assert(LocalizedAutomaticDisposeImplModeSource.Any(ch => ch <= 0x255));
+        }
 
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -122,9 +219,9 @@ namespace Benutomo
 
         void PostInitialization(GeneratorPostInitializationContext context)
         {
-            context.AddSource("AutomaticDisposeImplAttribute.cs", AutomaticDisposeImplAttributeSource);
-            context.AddSource("AutomaticDisposeImplMode.cs", AutomaticDisposeImplModeSource);
-            context.AddSource("AutomaticDisposeImplModeAttribute.cs", AutomaticDisposeImplModeAttributeSource);
+            context.AddSource("AutomaticDisposeImplAttribute.cs", LocalizedAutomaticDisposeImplAttributeSource);
+            context.AddSource("AutomaticDisposeImplMode.cs", LocalizedAutomaticDisposeImplModeSource);
+            context.AddSource("AutomaticDisposeImplModeAttribute.cs", LocalizedAutomaticDisposeImplModeAttributeSource);
         }
 
         public void Execute(GeneratorExecutionContext context)

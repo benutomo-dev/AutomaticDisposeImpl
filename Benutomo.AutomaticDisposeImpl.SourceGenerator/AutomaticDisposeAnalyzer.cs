@@ -14,32 +14,74 @@ namespace Benutomo.AutomaticDisposeImpl.SourceGenerator
         /// <summary>
         /// AutomaticDisposeImpl属性を付与した型の定義はpartialである必要があります。
         /// </summary>
-        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG0001 = new DiagnosticDescriptor("SG0001", "AutomaticDisposeImpl属性を付与する型にはpartialキーワードが必要", "AutomaticDisposeImpl属性を付与した型の定義はpartialである必要があります。", "Usage", DiagnosticSeverity.Error, isEnabledByDefault: true);
+        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG0001 = new DiagnosticDescriptor(
+            "SG0001",
+            new LocalizableResourceString(nameof(Resource.SG0001_Title), Resource.ResourceManager, typeof(Resource)),
+            new LocalizableResourceString(nameof(Resource.SG0001_Message), Resource.ResourceManager, typeof(Resource)),
+            "Usage",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true
+            );
 
         /// <summary>
         /// AutomaticDisposeImpl属性を付与した型はIDisposableを実装していなくてはなりません。
         /// </summary>
-        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG0002 = new DiagnosticDescriptor("SG0002", "AutomaticDisposeImpl属性を付与する型にはIDisposableまたはIAsyncDisposableインターフェイスが必要", "AutomaticDisposeImpl属性を付与した型はIDisposableとIAsyncDisposableの少なくともどちらか一方を実装していなくてはなりません。", "Usage", DiagnosticSeverity.Error, isEnabledByDefault: true);
+        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG0002 = new DiagnosticDescriptor(
+            "SG0002",
+            new LocalizableResourceString(nameof(Resource.SG0002_Title), Resource.ResourceManager, typeof(Resource)),
+            new LocalizableResourceString(nameof(Resource.SG0002_Message), Resource.ResourceManager, typeof(Resource)),
+            "Usage",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true
+            );
 
         /// <summary>
         /// {0}(メンバ名)はIAsyncDisposableを実装していますが、{1}(メンバを含んでいる型名)にIAsyncDisposableが実装されていないため、常に同期メソッドのDisposeによって破棄されます。
         /// </summary>
-        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG0003 = new DiagnosticDescriptor("SG0003", "メンバの非同期破棄メソッドを利用するためにはIAsyncDisposableインターフェイスが必要", "{0}はIAsyncDisposableを実装しているため、DisposeAsync()メソッドによる非同期破棄が可能ですが、{1}にIAsyncDisposableが実装されていないため常にDispose()による同期的な破棄がされます。{1}の実装インターフェイスにIAsyncDisposableを追加して非同期破棄をサポートしてください。", "Usage", DiagnosticSeverity.Warning, isEnabledByDefault: true);
+        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG0003 = new DiagnosticDescriptor(
+            "SG0003",
+            new LocalizableResourceString(nameof(Resource.SG0003_Title), Resource.ResourceManager, typeof(Resource)),
+            new LocalizableResourceString(nameof(Resource.SG0003_Message), Resource.ResourceManager, typeof(Resource)),
+            "Usage",
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true
+            );
 
         /// <summary>
         /// {0}(メンバ名)はIAsyncDisposableを実装していますが、IDisposableを実装していません。{1}(メンバを含んでいる型名)にはIDisposableのみが実装されているため、このメンバは自動破棄の対象とはなりません。
         /// </summary>
-        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG0004 = new DiagnosticDescriptor("SG0004", "非同期破棄のみをサポートするメンバはIDiposableのみを実装するクラスの自動破棄対象外", "{0}はIAsyncDisposableを実装していますが、IDisposableを実装していません。{1}にはIDisposableのみが実装されているため、このメンバは自動破棄の対象とはなりません。", "Usage", DiagnosticSeverity.Warning, isEnabledByDefault: true);
+        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG0004 = new DiagnosticDescriptor(
+            "SG0004",
+            new LocalizableResourceString(nameof(Resource.SG9998_Title), Resource.ResourceManager, typeof(Resource)),
+            new LocalizableResourceString(nameof(Resource.SG9998_Message), Resource.ResourceManager, typeof(Resource)),
+            "Usage",
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true
+            );
 
         /// <summary>
         /// 不明な内部異常によって{0}に対するDisposeの自動実装に失敗しました。
         /// </summary>
-        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG9998 = new DiagnosticDescriptor("SG9998", "ソース生成の失敗", "不明な内部異常によって{0}に対するDisposeの自動実装が失敗しました。", "Execution", DiagnosticSeverity.Error, isEnabledByDefault: true);
+        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG9998 = new DiagnosticDescriptor(
+            "SG9998",
+            new LocalizableResourceString(nameof(Resource.SG0001_Title), Resource.ResourceManager, typeof(Resource)),
+            new LocalizableResourceString(nameof(Resource.SG0001_Message), Resource.ResourceManager, typeof(Resource)),
+            "Execution",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true
+            );
 
         /// <summary>
         /// ソースジェネレータが不明な内部異常によって停止しました。
         /// </summary>
-        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG9999 = new DiagnosticDescriptor("SG9999", "異常終了", $"AutomaticDisposeGeneratorが不明な内部異常によって停止しました。", "Execution", DiagnosticSeverity.Error, isEnabledByDefault: true);
+        internal static DiagnosticDescriptor s_diagnosticDescriptor_SG9999 = new DiagnosticDescriptor(
+            "SG9999",
+            new LocalizableResourceString(nameof(Resource.SG9999_Title), Resource.ResourceManager, typeof(Resource)),
+            new LocalizableResourceString(nameof(Resource.SG9999_Message), Resource.ResourceManager, typeof(Resource)),
+            "Execution",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true
+            );
 
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
